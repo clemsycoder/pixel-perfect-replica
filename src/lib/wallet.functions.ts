@@ -213,8 +213,8 @@ export const verifyDeposit = createServerFn({ method: "POST" })
     }
 
     const tx = await verifyWithFlutterwave(flw.secretKey, data.txRef);
-    if (tx.status !== "successful" || tx.currency !== "NGN" || !tx.tx_ref) {
-      return { failed: true as const, status: tx.status ?? "unknown" };
+    if (!tx || tx.status !== "successful" || tx.currency !== "NGN" || !tx.tx_ref) {
+      return { failed: true as const, status: tx?.status ?? "unknown" };
     }
     const expectedKobo = BigInt(deposit.amount_kobo);
     const paidKobo = BigInt(Math.round((tx.amount ?? 0) * 100));
