@@ -52,12 +52,19 @@ export const updateMyProfile = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
-    const update: Record<string, unknown> = { updated_at: new Date().toISOString() };
-    if (data.fullName !== undefined) update.full_name = data.fullName.trim() || null;
-    if (data.phone !== undefined) update.phone = data.phone.trim() || null;
-    if (data.accountType !== undefined) update.account_type = data.accountType;
-    if (data.emailNotifications !== undefined) update.email_notifications = data.emailNotifications;
-    if (data.pushNotifications !== undefined) update.push_notifications = data.push_notifications;
+    const update: {
+      full_name?: string | null;
+      phone?: string | null;
+      account_type?: string;
+      email_notifications?: boolean;
+      push_notifications?: boolean;
+      updated_at: string;
+    } = { updated_at: new Date().toISOString() };
+    if (data.fullName !== undefined) update["full_name"] = data.fullName.trim() || null;
+    if (data.phone !== undefined) update["phone"] = data.phone.trim() || null;
+    if (data.accountType !== undefined) update["account_type"] = data.accountType;
+    if (data.emailNotifications !== undefined) update["email_notifications"] = data.emailNotifications;
+    if (data.pushNotifications !== undefined) update["push_notifications"] = data.pushNotifications;
     const { error } = await supabase.from("profiles").update(update).eq("id", userId);
     if (error) throw new Error("Could not save your profile");
     return { ok: true };
