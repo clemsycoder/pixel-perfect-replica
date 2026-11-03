@@ -577,12 +577,35 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      complete_deposit: {
+        Args: {
+          p_amount_kobo: number
+          p_provider_ref: string
+          p_tx_ref: string
+        }
+        Returns: Json
+      }
+      execute_trade: {
+        Args: { p_commodity_id: string; p_quantity: number; p_side: string }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      platform_setting: { Args: { p_key: string }; Returns: string }
+      refund_withdrawal: { Args: { p_withdrawal_id: string }; Returns: Json }
+      request_withdrawal: {
+        Args: {
+          p_amount_kobo: number
+          p_destination_account: string
+          p_destination_bank: string
+          p_destination_name: string
+        }
+        Returns: Json
       }
     }
     Enums: {
